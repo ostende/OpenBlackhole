@@ -1,0 +1,138 @@
+#!/bin/sh
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+datarootdir=@datarootdir@
+
+# perform a NTP update sync, before starting Enigma2, as it is broke in OE.
+#if [ -x /usr/sbin/ntpdate ]; then
+#	/usr/sbin/ntpdate -s -u pool.ntp.org && sleep 2
+#fi
+
+# hook to execute user startup script before enigma2 start
+if [ -x /etc/enigma2/startup.sh ]; then
+	/etc/enigma2/startup.sh
+fi
+
+if [ -x @bindir@/showiframe ]; then
+	if [ -f @sysconfdir@/enigma2/backdrop.mvi ]; then
+		@bindir@/showiframe @sysconfdir@/enigma2/backdrop.mvi
+	else
+		skin=`sed -En 's|config\.skin\.primary_skin=(.+)/skin\.xml|\1|p' @sysconfdir@/enigma2/settings`
+		if [ -z $skin ]; then
+			skin=`strings -n 10 @prefix@/lib/enigma2/python/skin.pyo | egrep -o -m 1 ".+/skin.xml" | sed 's|/skin.xml.*||'`
+		fi
+		if [ -n $skin -a -f @datadir@/enigma2/$skin/backdrop.mvi ]; then
+			@bindir@/showiframe @datadir@/enigma2/$skin/backdrop.mvi
+		elif [ -f @datadir@/backdrop.mvi ]; then
+			@bindir@/showiframe @datadir@/backdrop.mvi
+		fi
+	fi
+fi
+
+# hook to execute scripts always before enigma2 start
+if [ -x @bindir@/enigma2_pre_start.sh ]; then
+	@bindir@/enigma2_pre_start.sh
+fi
+
+if [ -d /home/root ]; then
+	export HOME=/home/root
+	cd
+fi
+
+#check for sundtek tuner helper lib
+if [ -e /opt/lib/libmediaclient.so ]; then
+	LIBS="/opt/lib/libmediaclient.so /usr/lib/libopen.so.0.0.0"
+else
+	LIBS="/usr/lib/libopen.so.0.0.0"
+fi
+
+sync
+
+(sleep 2; echo "enigma2 is the main pvr application... adjust oom score!"; PID=$(pidof enigma2); \
+	[ -e /proc/$PID/oom_score_adj ] && echo "-999" > /proc/$PID/oom_score_adj || echo "-17" > /proc/$PID/oom_adj;) &
+
+
+# set time format used to prefix each line in the debug logs
+if grep -q 'config\.crash\.logtimeformat' @sysconfdir@/enigma2/settings; then
+	export ENIGMA_DEBUG_TIME=`grep "config\.crash\.logtimeformat" @sysconfdir@/enigma2/settings | sed -E "s/^.*=(.*)$/\1/" -`
+fi
+
+if grep -q 'config\.crash\.enabledebug=True' @sysconfdir@/enigma2/settings; then
+	debug_dir=$(sed -n 's/config.crash.debug_path=//p' @sysconfdir@/enigma2/settings)
+	[ -n "${debug_dir}" -a -d "${debug_dir}" ] || debug_dir=/home/root/logs/
+	LD_PRELOAD=$LIBS @bindir@/enigma2 &> "${debug_dir}Enigma2_debug_$(date +%Y-%m-%d_%H-%M-%S).log"
+else
+	if grep -q 'config\.misc\.firstrun=False' @sysconfdir@/enigma2/settings; then
+		LD_PRELOAD=$LIBS @bindir@/enigma2 &> /dev/null
+	else
+		LD_PRELOAD=$LIBS @bindir@/enigma2
+	fi
+fi
+
+# enigma2 exit codes:
+#
+# 1 - halt
+# 2 - reboot
+# 3 - restart enigma
+#
+# >128 signal
+
+ret=$?
+case $ret in
+	1)
+		/sbin/halt
+		;;
+	2)
+		/sbin/reboot
+		;;
+	3)
+		rm -f /tmp/.listen.camd.socket.ignore
+		;;
+	4)
+		/sbin/rmmod lcd
+		/usr/sbin/fpupgrade --upgrade 2>&1 | tee /home/root/fpupgrade.log
+		sleep 1;
+		/sbin/rmmod fp
+		/sbin/modprobe fp
+		/sbin/reboot
+		;;
+	12)
+		if [ -e /dev/block/by-name/bootoptions ]; then
+			mkdir -p /tmp/bootoptions
+			mount /dev/block/by-name/bootoptions /tmp/bootoptions
+			cp -f /tmp/bootoptions/STARTUP_ANDROID /tmp/bootoptions/STARTUP_ONCE
+		else
+			echo "rescue" > /proc/stb/fp/boot_mode
+		fi
+		/sbin/reboot
+		;;
+	16)
+		if [ -e /dev/block/by-name/bootoptions ]; then
+			mkdir -p /tmp/bootoptions
+			mount /dev/block/by-name/bootoptions /tmp/bootoptions
+			cp -f /tmp/bootoptions/STARTUP_RECOVERY /tmp/bootoptions/STARTUP_ONCE
+		else
+			echo "rescue" > /proc/stb/fp/boot_mode
+		fi
+		/sbin/reboot
+		;;
+	42)
+		python /usr/lib/enigma2/python/upgrade.pyo
+		;;
+	43)
+		init 1
+		;;
+	44)
+		# little hack but it will be fixed soon in drivers
+		/usr/lib/enigma2/python/Plugins/SystemPlugins/MICOMUpgrade/bin/fbclear
+		/usr/bin/showiframe /usr/lib/enigma2/python/Plugins/SystemPlugins/MICOMUpgrade/wait.mvi
+		echo fpupload >/proc/vfd && sleep 3 && dd bs=256k if=/tmp/micom.bin of=/dev/mcu
+		/usr/bin/showiframe /usr/lib/enigma2/python/Plugins/SystemPlugins/MICOMUpgrade/reboot.mvi
+		# Wait forever for the user to power off
+		while(true) ; do sleep 60 ; done
+		;;
+	*)
+		rm -f /tmp/.listen.camd.socket.ignore
+		;;
+esac

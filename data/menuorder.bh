@@ -1,0 +1,13 @@
+#Main Menu
+youtubetv 7
+youtube_tv 8
+#System Menu
+bluetooth_setup 1
+remotecontrolcode 50
+iptv_config 16
+#Menu Service searching
+cablescan 25
+#User interface Menu
+#Epg Menu
+crossepg 2
+epgimporter 3
