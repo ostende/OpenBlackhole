@@ -1,4 +1,7 @@
-OpenBlackHole Enigma2 Based On OpenViX
+enigma2
+=======
+
+OpenBH Enigma2 based OpenViX
 
 Support:
 

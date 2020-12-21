@@ -319,9 +319,9 @@ class LogManager(Screen):
 				remove(self.defaultDir + self.sel[0])
 			self["list"].changeDir(self.defaultDir)
 			self["LogsSize"].update(config.crash.debug_path.value)
-
+			
 	def sendlog_bh(self, addtionalinfo = None):
-		self.session.open(MessageBox, _("Sorry due to spamming, log sending has been disabled.\nPlease post your log @ Ostende."), MessageBox.TYPE_INFO)
+		self.session.open(MessageBox, _("Sorry due to spamming, log sending has been disabled.\nPlease post your log @ www.vuplus-community.net."), MessageBox.TYPE_INFO)
 
 class LogManagerViewLog(Screen):
 	def __init__(self, session, selected):

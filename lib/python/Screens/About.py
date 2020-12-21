@@ -46,8 +46,8 @@ class About(Screen):
 									})
 
 	def populate(self):
-		self["lab1"] = StaticText(_("OpenBlackHole Image"))
-		self["lab2"] = StaticText(_("From Ostende"))
+		self["lab1"] = StaticText(_("Open Black Hole"))
+		self["lab2"] = StaticText(_("From the BH Team"))
 		model = None
 		AboutText = ""
 		self["lab3"] = StaticText(_("Support at %s") % "www.vuplus-community.net")
@@ -330,8 +330,8 @@ class SystemMemoryInfo(Screen):
 		Screen.__init__(self, session)
 		self.setTitle(_("Memory"))
 		self.skinName = ["SystemMemoryInfo", "About"]
-		self["lab1"] = StaticText(_("OpenBlackHole Image"))
-		self["lab2"] = StaticText(_("From Ostende"))
+		self["lab1"] = StaticText(_("Open Black Hole Image"))
+		self["lab2"] = StaticText(_("From the BH Team"))
 		self["lab3"] = StaticText(_("Support at %s") % "www.vuplus-community.net")
 		self["AboutScrollLabel"] = ScrollLabel()
 
