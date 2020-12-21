@@ -325,9 +325,8 @@ class Session:
 
 	def openWithCallback(self, callback, screen, *arguments, **kwargs):
 		dlg = self.open(screen, *arguments, **kwargs)
-		if dlg != 'config.crash.bsodpython.value=True':
-			dlg.callback = callback
-			return dlg
+		dlg.callback = callback
+		return dlg
 
 	def open(self, screen, *arguments, **kwargs):
 		if self.dialog_stack and not self.in_exec:
@@ -335,15 +334,7 @@ class Session:
 			# ...unless it's the very first screen.
 
 		self.pushCurrent()
-		if config.crash.bsodpython.value:
-			try:
-				dlg = self.current_dialog = self.instantiateDialog(screen, *arguments, **kwargs)
-			except:
-				self.popCurrent()
-				raise
-				return 'config.crash.bsodpython.value=True'
-		else:
-			dlg = self.current_dialog = self.instantiateDialog(screen, *arguments, **kwargs)
+		dlg = self.current_dialog = self.instantiateDialog(screen, *arguments, **kwargs)
 		dlg.isTmp = True
 		dlg.callback = None
 		self.execBegin()
