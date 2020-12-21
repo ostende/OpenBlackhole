@@ -25,7 +25,7 @@ class MessageBox(Screen, HelpableScreen):
 		TYPE_MESSAGE: _("Message")
 	}
 
-	def __init__(self, session, text, type=TYPE_YESNO, timeout=0, close_on_any_key=False, default=True, enable_input=True, msgBoxID=None, picon=True, simple=False, wizard=False, list=None, skin_name=None, timeout_default=None, title=None):
+	def __init__(self, session, text, type=TYPE_YESNO, timeout=-1, close_on_any_key=False, default=True, enable_input=True, msgBoxID=None, picon=True, simple=False, wizard=False, list=None, skin_name=None, timeout_default=None, windowTitle = None, title = "Message", showYESNO=False):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
 		if text:
@@ -87,7 +87,7 @@ class MessageBox(Screen, HelpableScreen):
 			self.skinName = [skin_name] + self.skinName
 		if not list:
 			list = []
-		if type == self.TYPE_YESNO:
+		if type == self.TYPE_YESNO or showYESNO:
 			if list:
 				self.list = list
 			elif default:

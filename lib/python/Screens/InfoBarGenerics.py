@@ -1571,11 +1571,11 @@ class InfoBarEPG:
 				iPlayableService.evUpdatedEventInfo: self.__evEventInfoChanged,
 			})
 
-		# Note regarding INFO button on the RCU. Some RCUs do not have an INFO button, but to make matters 
-		# more complicated they have an EPG button that sends KEY_INFO instead of KEY_EPG. To deal with 
-		# this the INFO button methods check SystemInfo["HasInfoButton"] to see if the RCU has an INFO button 
+		# Note regarding INFO button on the RCU. Some RCUs do not have an INFO button, but to make matters
+		# more complicated they have an EPG button that sends KEY_INFO instead of KEY_EPG. To deal with
+		# this the INFO button methods check SystemInfo["HasInfoButton"] to see if the RCU has an INFO button
 		# and if not the event is rerouted to the corresponding EPG button method of the same name.
-		
+
 		self["EPGActions"] = HelpableActionMap(self, "InfobarEPGActions",
 			{
 				"RedPressed": (self.RedPressed, self._helpRedPressed),
@@ -4457,3 +4457,53 @@ class InfoBarHdmi:
 		else:
 			self.hdmi_enabled_full = False
 			self.session.nav.playService(slist.servicelist.getCurrent())
+
+#########################################################################################
+# handle bsod (python crashes) and show information after crash                         #
+#########################################################################################
+
+from enigma import getBsodCounter, resetBsodCounter
+class InfoBarHandleBsod:
+	def __init__(self):
+		self.lastBsod = 0
+		self.infoBsodIsShown = False
+		self.lastestBsodWarning = False
+		self.checkBsodTimer = eTimer()
+		self.checkBsodTimer.callback.append(self.checkBsodCallback)
+		self.checkBsodTimer.start(1000,False)
+		config.crash.bsodpython_ready.setValue(True)
+
+	def checkBsodCallback(self):
+		if Screens.Standby.inStandby or self.infoBsodIsShown:
+			return
+		bsodcnt = getBsodCounter()
+		if config.crash.bsodpython.value and self.lastBsod < bsodcnt:
+			maxbs = int(config.crash.bsodmax.value) or 100
+			maxlog = 1 or int(config.crash.bsodhide.value)
+			writelog = bsodcnt == 1 or not bsodcnt > int(config.crash.bsodhide.value) or bsodcnt == maxbs
+			txt = _("Your Receiver has a Software problem detected. Since the last reboot it has occured %d times.\n") %bsodcnt
+			txt += _("(Attention: There will be a restart after %d crashes.)\n") %maxbs
+			txt += "-"*80 + "\n"
+			txt += _("A crashlog was %s created in '%s'") %(('not','')[int(writelog)], config.crash.debug_path.value)
+			if not writelog:
+				txt += _("\n(It is set that %d crash logs will be displayed and written.)") %maxlog
+			if bsodcnt == maxbs:
+				txt += "\n" + "-"*80 + "\n"
+				txt += _("Warning: This is the last crash before an automatic restart is performed.\n")
+				txt += _("Should the crash counter be reset to prevent a restart?")
+				self.lastestBsodWarning = True
+			try:
+				self.infoBsodIsShown = True
+				self.session.openWithCallback(self.infoBsodCallback, MessageBox, txt, type=MessageBox.TYPE_ERROR, default = False, close_on_any_key=not self.lastestBsodWarning, showYESNO = self.lastestBsodWarning)
+			except Exception, e:
+				print "[InfoBarHandleBsod] Exception:", e
+				self.infoBsodCallback(False)
+		self.lastBsod = bsodcnt
+
+	def infoBsodCallback(self, ret):
+		if ret and self.lastestBsodWarning:
+			resetBsodCounter()
+		self.infoBsodIsShown = False
+		self.lastestBsodWarning = False
+
+#########################################################################################			
