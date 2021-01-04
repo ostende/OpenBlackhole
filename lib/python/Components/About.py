@@ -143,7 +143,7 @@ def getCPUSpeedString():
         return '2.0 GHz'
     if getMachineBuild() in ('vuduo4k',):
         return '2.1 GHz'
-    if getMachineBuild() in ('hd51', 'hd52', 'sf4008', 'vs1500', 'et1x000', 'h7', 'et13000', 'sf5008', 'osmio4k', 'osmio4kplus'):
+    if getMachineBuild() in ('hd51', 'hd52', 'sf4008', 'vs1500', 'et1x000', 'h7', 'et13000', 'sf5008', 'osmio4k', 'osmio4kplus', 'osmini4k'):
         try:
             import binascii
             f = open('/sys/firmware/devicetree/base/cpus/cpu@0/clock-frequency', 'rb')
@@ -280,7 +280,7 @@ def getFFmpegVersionString():
 		version = ffmpeg[1].split("-")[0].replace("\n","")
 		return "%s" % version.split("+")[0]
 	except:
-		return ""   
+		return ""
 
 
 about = modules[__name__]
