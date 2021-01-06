@@ -974,7 +974,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		elif machine.endswith("4k") or machine.endswith("4kse"):
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
-		elif machine != "dm920" and not (machine.endswith("4k") or machine.endswith("4kse")):
+		elif machine == "dm920":
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		if machine == "dm800se":
