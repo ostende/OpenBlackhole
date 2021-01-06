@@ -968,6 +968,8 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		["YouTube", "enigma2-plugin-extensions-youtube"],
 		["E2iplayer", "enigma2-plugin-extensions-e2iplayer"],
 		["TsMedia", "enigma2-plugin-extensions-tsmedia"],
+		["Torrent Player", "enigma2-plugin-extensions-torrentplayer"],
+		["Ncam", "enigma2-plugin-softcams-ncam"],
 		]
 
 		machine = getBoxType()
