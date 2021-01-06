@@ -965,7 +965,9 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		["DVDPlayer", "enigma2-plugin-extensions-dvdplayer"],
 		["Dlna Browser (Djmount Client)", "enigma2-plugin-extensions-dlnabrowser"],
 		["MiniDlna UPnP Server", "enigma2-plugin-extensions-dlnaserver"],
-		["Youtube", "enigma2-plugin-extensions-youtube"],
+		["YouTube", "enigma2-plugin-extensions-youtube"],
+		["E2iplayer", "enigma2-plugin-extensions-e2iplayer"],
+		["TsMedia", "enigma2-plugin-extensions-tsmedia"],
 		]
 
 		machine = getBoxType()
@@ -1017,7 +1019,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
-		self["lab1"].setText(_("Please disable ALL the plugins you don't need to use.\nThis will Speed Up Image Performance."))
+		self["lab1"].setText(_("Please disable All the plugins you don't need to use.\nThis will Speed Up Image Performance."))
 
 	def checkInst(self, name):
 		ret = False
@@ -1055,7 +1057,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 
 
 		if len(self.mycmdlist) > 0:
-			self.session.open(Console, title=_("Black Hole Speed Up"), cmdlist=self.mycmdlist, finishedCallback = self.allDone)
+			self.session.open(Console, title=_("OpenBlackHole Speed Up"), cmdlist=self.mycmdlist, finishedCallback = self.allDone)
 		else:
 			self.close()
 
