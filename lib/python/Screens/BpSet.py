@@ -969,7 +969,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		]
 
 		machine = getBoxType()
-		if machine != "vusolo" and not (machine.endswith("4k") or machine.endswith("4kse")):
+		if machine != "vusolo" and not (machine.endswith("4k") or machine.endswith("4kse") or machine.endswith("dm920")):
 			self.pluglist.append(["Opera browser & HbbTV", "enigma2-plugin-extensions-hbbtv"])
 		elif machine.endswith("4k") or machine.endswith("4kse"):
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
