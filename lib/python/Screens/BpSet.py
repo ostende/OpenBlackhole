@@ -778,7 +778,7 @@ class DeliteOpenvpn(Screen):
 		Screen.__init__(self, session)
 
 		self["lab1"] = Label(_("      OpenVPN"))
-		self["lab1a"] = Label(_("Panel - by Black Hole Team"))
+		self["lab1a"] = Label(_("Panel by Black Hole Team"))
 		self["lab2"] = Label(_("Startup Module:"))
 		self["labactive"] = Label(_("Inactive"))
 		self["lab3"] = Label(_("Current Status:"))
@@ -935,7 +935,7 @@ class BhBackupSettings(Screen):
 
 class BhSpeedUp(Screen, ConfigListScreen):
 	skin = """
-	<screen position="center,center" size="902,570" title="Black Hole Speed Up">
+	<screen position="center,center" size="902,570" title="OpenBlackHole Speed Up">
 		<widget name="lab1" position="10,10" size="882,60" font="Regular;20" valign="top" transparent="1"/>
 		<widget name="config" position="30,70" size="840,450" scrollbarMode="showOnDemand"/>
 		<ePixmap pixmap="skin_default/buttons/red.png" position="200,530" size="140,40" alphatest="on"/>
@@ -967,7 +967,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		["MiniDlna UPnP Server", "enigma2-plugin-extensions-dlnaserver"],
 		["YouTube", "enigma2-plugin-extensions-youtube"],
 		["E2iplayer", "enigma2-plugin-extensions-e2iplayer"],
-		["TsMedia", "enigma2-plugin-extensions-tsmedia"],
+		["Ts Media", "enigma2-plugin-extensions-tsmedia"],
 		["Torrent Player", "enigma2-plugin-extensions-torrentplayer"],
 		["Ncam", "enigma2-plugin-softcams-ncam"],
 		]
