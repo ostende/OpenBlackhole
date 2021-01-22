@@ -17,7 +17,7 @@ config.misc.fast_plugin_button = ConfigText(default="")
 
 class DeliteGreenPanel(Screen):
 	skin = """
-	<screen name="DeliteGreenPanel" position="center,center" size="1000,720" title="Black Hole Green Panel" flags="wfNoBorder">
+	<screen name="DeliteGreenPanel" position="center,center" size="1000,720" title="OpenBlackHole Green Panel" flags="wfNoBorder">
 		<eLabel text="Black Hole Green Panel" position="80,30" size="800,38" font="Regular;34" halign="left" foregroundColor="#004c74" backgroundColor="transpBlack" transparent="1"/>
 		<widget source="list" render="Listbox" position="80,105" zPosition="1" size="840,500" scrollbarMode="showOnDemand"  transparent="1">
 			<convert type="TemplatedMultiContent">
@@ -105,7 +105,7 @@ class DeliteGreenPanel(Screen):
 
 class DeliteSetupFp(Screen):
 	skin = """
-	<screen position="160,115" size="390,370" title="Black Hole Fast Plugin Setup">
+	<screen position="160,115" size="390,370" title="OpenBlackHole Fast Plugin Setup">
 		<widget source="list" render="Listbox" position="10,10" size="370,300" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
@@ -153,7 +153,7 @@ class DeliteSetupFp(Screen):
 
 class DeliteScript(Screen):
 	skin = """
-	<screen position="80,100" size="560,410" title="Black Hole Script Panel">
+	<screen position="80,100" size="560,410" title="OpenBlackHole Script Panel">
 		<widget source="list" render="Listbox" position="10,10" size="540,300" scrollbarMode="showOnDemand" >
 			<convert type="StringList" />
 		</widget>
@@ -210,5 +210,5 @@ class DeliteScript(Screen):
 		if mysel:
 			mysel = mysel[0]
 			mysel2 = "/usr/script/" + mysel + ".sh"
-			mytitle = _("Black Hole E2 Script: ") + mysel
+			mytitle = _("OpenBlackHole E2 Script: ") + mysel
 			self.session.open(Console, title=mytitle, cmdlist=[mysel2])

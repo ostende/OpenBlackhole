@@ -1,6 +1,6 @@
 from __future__ import print_function
 from Components.ActionMap import HelpableActionMap
-from Components.EpgList import EPG_TYPE_SINGLE
+from Components.EpgList import EPG_TYPE_SINGLE, EPG_TYPE_EPGBAR
 from Screens.EpgSelectionChannel import EPGSelectionChannel
 
 
@@ -12,6 +12,10 @@ class EPGSelection(EPGSelectionChannel):
 			print("[EPGSelection] Warning: EPGSelection does not support type '%s'" % EPGtype)
 			print("               Attempting to continue in single EPG mode")
 		EPGSelectionChannel.__init__(self, session, service)
+		self.skinName = ["EPGSelectionEPGBar_SD"]
+			if session.desktop.size().width() > 720:
+				self.skinName = ["EPGSelectionEPGBar_HD"]
+			self.type = EPG_TYPE_EPGBAR
 
 		# Rewrite the EPG actions to invoke the compatibility functions.
 		helpDescription = _("EPG Commands")

@@ -965,6 +965,7 @@ class BhSpeedUp(Screen, ConfigListScreen):
 		["DVDPlayer", "enigma2-plugin-extensions-dvdplayer"],
 		["Dlna Browser (Djmount Client)", "enigma2-plugin-extensions-dlnabrowser"],
 		["MiniDlna UPnP Server", "enigma2-plugin-extensions-dlnaserver"],
+		["IpAudio", "enigma2-plugin-softcams-ipaudio"],
 		["YouTube", "enigma2-plugin-extensions-youtube"],
 		["E2iplayer", "enigma2-plugin-extensions-e2iplayer"],
 		["Ts Media", "enigma2-plugin-extensions-tsmedia"],
@@ -979,6 +980,8 @@ class BhSpeedUp(Screen, ConfigListScreen):
 			self.pluglist.append(["ChromiumOS", "enigma2-plugin-extensions-chromium"])
 			self.pluglist.append(["HbbTV", "enigma2-plugin-extensions-webkithbbtv"])
 		elif machine == "dm920":
+			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
+		elif machine == "osmini4k":
 			self.pluglist.append(["Kodi", "enigma2-plugin-extensions-kodi"])
 
 		if machine == "dm800se":

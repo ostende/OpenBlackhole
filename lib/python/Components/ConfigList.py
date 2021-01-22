@@ -425,3 +425,20 @@ class ConfigListScreen:
 
 	def run(self):  # Allow ConfigList based screens to be processed from the Wizard.
 		self.keySave()
+
+class getSelectionChoices(MenuList):
+	def __init__(self, list, selection = 0, enableWrapAround=False):
+		MenuList.__init__(self, list, enableWrapAround, eListboxPythonMultiContent)
+		font = skin.fonts.get("ChoiceList", ("Regular", 20, 30))
+		self.l.setFont(0, gFont(font[0], font[1]))
+		self.l.setItemHeight(font[2])
+		self.ItemHeight = font[2]
+		self.selection = selection
+
+	def postWidgetCreate(self, instance):
+		MenuList.postWidgetCreate(self, instance)
+		self.moveToIndex(self.selection)
+		self.instance.setWrapAround(True)
+
+	def getItemHeight(self):
+		return self.ItemHeight
